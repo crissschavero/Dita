@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bichito Saltarín</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      transition: background 1s;
+      overflow: hidden;
+    }
+
+    #mensaje {
+      font-size: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #contenedor {
+      position: relative;
+      width: 100%;
+      height: 70%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #bichito {
+      width: 150px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Animación de salto */
+    .saltar {
+      animation: saltito 0.6s ease;
+    }
+    @keyframes saltito {
+      0% { transform: translateY(0); }
+      40% { transform: translateY(-80px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Globo de diálogo */
+    #dialogo {
+      position: absolute;
+      top: -80px;
+      background: white;
+      border-radius: 15px;
+      padding: 10px 15px;
+      font-size: 16px;
+      box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.5s;
+      z-index: 20;
+    }
+
+    /* Nubes */
+    .nube {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+    .nube::before, .nube::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+    .nube1 { width: 120px; height: 60px; top: 10%; left: 10%; }
+    .nube2 { width: 150px; height: 70px; top: 20%; right: 15%; }
+    .nube3 { width: 100px; height: 50px; bottom: 15%; left: 20%; }
+
+    .nube::before {
+      width: 60px; height: 60px; left: -30px; top: -10px;
+    }
+    .nube::after {
+      width: 70px; height: 70px; right: -30px; top: -15px;
+    }
+
+    /* Arcoiris */
+    .arcoiris {
+      position: absolute;
+      bottom: 0;
+      width: 300px;
+      height: 150px;
+      border-radius: 50% 50% 0 0;
+      background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+      opacity: 0.6;
+    }
+    .arcoiris1 { left: 5%; }
+    .arcoiris2 { right: 5%; }
+  </style>
+</head>
+<body>
+  <div id="mensaje">👉 ¡Haz clic en el bichito para que hable!</div>
+  <div id="contenedor">
+    <div class="nube nube1"></div>
+    <div class="nube nube2"></div>
+    <div class="nube nube3"></div>
+    <div class="arcoiris arcoiris1"></div>
+    <div class="arcoiris arcoiris2"></div>
+
+    <!-- Aquí va el bichito en el centro -->
+    <img id="bichito" src="bichito.png" alt="bichito kawaii">
+    <div id="dialogo"></div>
+  </div>
+
+  <script>
+    const bichito = document.getElementById("bichito");
+    const dialogo = document.getElementById("dialogo");
+    const body = document.body;
+
+    const frases = [
+      "¡Hola! 💖",
+      "¡Qué lindo día! 🌈",
+      "¿Quieres jugar conmigo? ✨",
+      "Eres genial 😍",
+      "¡Sigue sonriendo! 😊"
+    ];
+
+    const paletas = [
+      "linear-gradient(to top, #89f7fe, #66a6ff)", // azul celeste
+      "linear-gradient(to top, #ff758c, #ff7eb3)", // rosa-rojo
+      "linear-gradient(to top, #a8e063, #56ab2f)", // verdes
+      "linear-gradient(to top, #f7971e, #ffd200)"  // naranja-amarillo
+    ];
+
+    let colorIndex = 0;
+
+    bichito.addEventListener("click", () => {
+      // Animación salto
+      bichito.classList.add("saltar");
+      setTimeout(() => bichito.classList.remove("saltar"), 600);
+
+      // Mostrar frase aleatoria
+      const frase = frases[Math.floor(Math.random() * frases.length)];
+      dialogo.textContent = frase;
+      dialogo.style.opacity = 1;
+      setTimeout(() => { dialogo.style.opacity = 0; }, 2000);
+
+      // Cambiar fondo
+      body.style.background = paletas[colorIndex];
+      colorIndex = (colorIndex + 1) % paletas.length;
+    });
+  </script>
+</body>
+</html>
