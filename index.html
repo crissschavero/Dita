@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bichito Saltarín</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      transition: background 1s;
+      overflow: hidden;
+    }
+
+    #bichito {
+      display: block;       /* hace que la imagen ocupe toda la línea */
+      margin: 0 auto;       /* centra la imagen */
+      width: 300px;         /* ajusta tamaño a gusto */
+      height: auto;
+    }
+
+    #mensaje {
+      font-size: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-top: 20px;     /* ahora separa del bichito */
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+      z-index: 30;
+      position: relative;
+      text-align: center;
+      width: fit-content;   /* el mensaje se ajusta al contenido */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #contenedor {
+      position: relative;
+      width: 100%;
+      height: 70%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Animación de salto */
+    .saltar {
+      animation: saltito 0.6s ease;
+    }
+    @keyframes saltito {
+      0% { transform: translateY(0); }
+      40% { transform: translateY(-80px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Globo de diálogo */
+    #dialogo {
+      position: absolute;
+      top: -130px; /* más arriba para no tapar el mensaje */
+      background: white;
+      border-radius: 15px;
+      padding: 15px 20px;
+      font-size: 30px; /* más grande */
+      box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.5s;
+      z-index: 20;
+      max-width: 250px;
+      text-align: center;
+    }
+
+    /* Nubes */
+    .nube {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+    .nube::before, .nube::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+    .nube1 { width: 120px; height: 60px; top: 10%; left: 10%; }
+    .nube2 { width: 150px; height: 70px; top: 20%; right: 15%; }
+    .nube3 { width: 100px; height: 50px; bottom: 15%; left: 20%; }
+
+    .nube::before {
+      width: 60px; height: 60px; left: -30px; top: -10px;
+    }
+    .nube::after {
+      width: 70px; height: 70px; right: -30px; top: -15px;
+    }
+
+    /* Arcoiris */
+    .arcoiris {
+      position: absolute;
+      bottom: 0;
+      width: 300px;
+      height: 150px;
+      border-radius: 50% 50% 0 0;
+      background: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+      opacity: 0.6;
+    }
+    .arcoiris1 { left: 5%; }
+    .arcoiris2 { right: 5%; }
+  </style>
+</head>
+<body>
+
+  <div id="contenedor">
+    <div class="nube nube1"></div>
+    <div class="nube nube2"></div>
+    <div class="nube nube3"></div>
+    <div class="arcoiris arcoiris1"></div>
+    <div class="arcoiris arcoiris2"></div>
+
+    <!-- Bichito -->
+    <img src="bichoo.png" alt="Bichito" id="bichito">
+    <div id="dialogo"></div>
+  </div>
+
+  <!-- Mensaje debajo -->
+  <div id="mensaje">
+    si queres q hable toca a dita nena
+  </div>
+
+  <script>
+    const bichito = document.getElementById("bichito");
+    const dialogo = document.getElementById("dialogo");
+    const body = document.body;
+
+    const frases = [
+      "capas te aburra pero probablemente necesite un beso tuyo",
+      "por si no te lo dije,te amo💖",
+      "mas te vale no te pases de viva",
+      "que linda te ves enojada dita jsjsjs",
+      "sos la unica y yo no miento🙄",
+      "seguramente este pensando en vos",
+      "algun dia voy a superarte nena",
+      "espero que te mates de un golpe el dia que hables con otro",
+      "ysi me voy a la oficina? o a tu casa?",
+      "unas ganas de dormir tengo.....con vos jsjsj",
+      "sabes que sos especial por eso te busco siempre🤭",
+      "lo que me costo estoooo"
+    ];
+
+    const paletas = [
+      "linear-gradient(to top, #89f7fe, #66a6ff)", // azul celeste
+      "linear-gradient(to top, #ff758c, #ff7eb3)", // rosa-rojo
+      "linear-gradient(to top, #a8e063, #56ab2f)", // verdes
+      "linear-gradient(to top, #f7971e, #ffd200)", // naranja-amarillo
+      "linear-gradient(to top, #89f7fe, #66a6ff)",
+      "linear-gradient(to top, #ff758c, #ff7eb3)",
+      "linear-gradient(to top, #a8e063, #56ab2f)",
+      "linear-gradient(to top, #f7971e, #ffd200)",
+      "linear-gradient(to top, #89f7fe, #66a6ff)",
+      "linear-gradient(to top, #ff758c, #ff7eb3)",
+      "linear-gradient(to top, #a8e063, #56ab2f)"
+    ];
+
+    let colorIndex = 0;
+    let dialogoTimeout;
+
+    bichito.addEventListener("click", () => {
+      // Animación salto
+      bichito.classList.add("saltar");
+      setTimeout(() => bichito.classList.remove("saltar"), 600);
+
+      // Mostrar frase aleatoria
+      const frase = frases[Math.floor(Math.random() * frases.length)];
+      dialogo.textContent = frase;
+      dialogo.style.opacity = 1;
+
+      // Limpiar cualquier timeout anterior
+      if (dialogoTimeout) clearTimeout(dialogoTimeout);
+
+      // Ocultar diálogo después de 25 segundos
+      dialogoTimeout = setTimeout(() => {
+        dialogo.style.opacity = 0;
+      }, 25000);
+
+      // Cambiar fondo
+      body.style.background = paletas[colorIndex];
+      colorIndex = (colorIndex + 1) % paletas.length;
+    });
+  </script>
+</body>
+</html>
